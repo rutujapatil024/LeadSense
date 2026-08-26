@@ -10,10 +10,3 @@ A full-stack RAG-powered application that lets sales/franchise teams query lead 
 - **LLM**: Groq API (free tier) via LangChain
 - **Frontend**: React (Vite) + Recharts
 
-
-├── frontend/          # React (Vite) frontend
-│   └── src/
-│       ├── components/  # Reusable UI components
-│       └── pages/       # Page-level components
-└── README.md
-```
