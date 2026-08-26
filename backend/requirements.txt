@@ -1,0 +1,28 @@
+# ============================================================
+# LeadSense — Python Dependencies
+# Install with: pip install -r requirements.txt
+# ============================================================
+
+# Web framework + server
+fastapi
+uvicorn[standard]
+
+# Environment variable management
+python-dotenv
+
+# Supabase Python client (includes PostgREST, Auth, Storage)
+supabase
+
+# Local embedding model — generates 384-dim vectors, runs on CPU, no API cost
+sentence-transformers
+
+# LLM orchestration via LangChain
+langchain
+langchain-core
+langchain-groq
+
+# File upload support (for CSV bulk upload)
+python-multipart
+
+# CSV parsing and data manipulation
+pandas

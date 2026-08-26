@@ -1,0 +1,983 @@
+/* ============================================================
+   LeadSense — Neumorphism (Soft UI) Design System
+   ============================================================
+   Inspired by modern Soft UI & Neumorphism aesthetics with dual
+   outer extruded shadows, inner sunken shadows, pastel vibrant
+   gradients, and a complete Light/Dark theme toggle system.
+   ============================================================ */
+
+/* ── Google Font Import ─────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ── Light Neumorphism Theme (Default) ───────────────────── */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  /* Surface colors */
+  --bg-primary: #e6eef8;
+  --bg-secondary: #e6eef8;
+  --bg-tertiary: #df88f3;
+  --bg-card: #e6eef8;
+  --bg-card-hover: #e8f0fa;
+  --bg-sunken: #dbe4f0;
+
+  /* Neumorphic Extruded (Raised) Shadows */
+  --neu-shadow-flat: -7px -7px 16px #ffffff, 7px 7px 16px rgba(165, 180, 202, 0.65);
+  --neu-shadow-flat-sm: -4px -4px 10px #ffffff, 4px 4px 10px rgba(165, 180, 202, 0.55);
+  --neu-shadow-flat-lg: -10px -10px 24px #ffffff, 10px 10px 24px rgba(165, 180, 202, 0.7);
+
+  /* Neumorphic Sunken (Pressed / Inset) Shadows */
+  --neu-shadow-pressed: inset 4px 4px 8px rgba(165, 180, 202, 0.65), inset -4px -4px 8px #ffffff;
+  --neu-shadow-pressed-sm: inset 2.5px 2.5px 5px rgba(165, 180, 202, 0.6), inset -2.5px -2.5px 5px #ffffff;
+
+  /* Accent colors & vibrant gradients */
+  --accent-purple: #7b61ff;
+  --accent-purple-light: #9785ff;
+  --accent-blue: #4f80ff;
+  --accent-blue-light: #769eff;
+  --accent-green: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-cyan: #06b6d4;
+
+  --accent-gradient-primary: linear-gradient(135deg, #7b61ff 0%, #4f80ff 100%);
+  --accent-gradient-glow: 0 6px 20px rgba(123, 97, 255, 0.35);
+
+  /* Text colors */
+  --text-primary: #334155;
+  --text-secondary: #64748b;
+  --text-tertiary: #94a3b8;
+  --text-muted: #cbd5e1;
+
+  /* Border colors */
+  --border-subtle: rgba(255, 255, 255, 0.6);
+  --border-default: rgba(165, 180, 202, 0.3);
+
+  /* Chart & Gauge colors */
+  --chart-grid: rgba(165, 180, 202, 0.25);
+  --chart-tooltip-bg: #e6eef8;
+}
+
+/* ── Dark Neumorphism Theme ────────────────────────────── */
+[data-theme="dark"] {
+  color-scheme: dark;
+  /* Surface colors */
+  --bg-primary: #1a1e29;
+  --bg-secondary: #1a1e29;
+  --bg-tertiary: #222736;
+  --bg-card: #1a1e29;
+  --bg-card-hover: #1d222f;
+  --bg-sunken: #161923;
+
+  /* Neumorphic Extruded (Raised) Shadows */
+  --neu-shadow-flat: -6px -6px 14px #232938, 6px 6px 14px #11131a;
+  --neu-shadow-flat-sm: -3.5px -3.5px 8px #232938, 3.5px 3.5px 8px #11131a;
+  --neu-shadow-flat-lg: -10px -10px 24px #252b3b, 10px 10px 24px #0f1117;
+
+  /* Neumorphic Sunken (Pressed / Inset) Shadows */
+  --neu-shadow-pressed: inset 4px 4px 8px #11131a, inset -4px -4px 8px #232938;
+  --neu-shadow-pressed-sm: inset 2.5px 2.5px 5px #11131a, inset -2.5px -2.5px 5px #232938;
+
+  /* Accent colors & vibrant gradients */
+  --accent-purple: #9281ff;
+  --accent-purple-light: #b0a4ff;
+  --accent-blue: #60a5fa;
+  --accent-blue-light: #93c5fd;
+  --accent-green: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-red: #f87171;
+  --accent-cyan: #22d3ee;
+
+  --accent-gradient-primary: linear-gradient(135deg, #818cf8 0%, #3b82f6 100%);
+  --accent-gradient-glow: 0 6px 20px rgba(129, 140, 248, 0.3);
+
+  /* Text colors */
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --text-muted: #475569;
+
+  /* Border colors */
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.08);
+
+  /* Chart & Gauge colors */
+  --chart-grid: rgba(255, 255, 255, 0.06);
+  --chart-tooltip-bg: #222736;
+}
+
+/* ── Universal Design Tokens ────────────────────────────── */
+:root {
+  --font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  --sidebar-width: 270px;
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Reset & Base ───────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* ── Layout ─────────────────────────────────────────────── */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: var(--space-xl);
+  min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: var(--space-md);
+  }
+}
+
+/* ── Page Header ────────────────────────────────────────── */
+.page-header {
+  margin-bottom: var(--space-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.page-header h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+
+.page-header p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin-top: var(--space-xs);
+}
+
+/* ── Neumorphic Card ────────────────────────────────────── */
+.card {
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-flat);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  border: 1px solid var(--border-subtle);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--neu-shadow-flat-lg);
+}
+
+/* ── Stat Cards ─────────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.stat-card {
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-flat);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-base);
+  border: 1px solid var(--border-subtle);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--neu-shadow-flat-lg);
+}
+
+.stat-card .stat-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.stat-card .stat-value {
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-top: var(--space-xs);
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+
+.stat-card .stat-icon {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-flat-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-purple);
+}
+
+/* ── Buttons ────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 12px 22px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  outline: none;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Primary Neumorphic Gradient Button */
+.btn-primary {
+  background: var(--accent-gradient-primary);
+  color: white;
+  box-shadow: var(--accent-gradient-glow), var(--neu-shadow-flat-sm);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(123, 97, 255, 0.45);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Secondary Neumorphic Extruded Button */
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: var(--neu-shadow-flat-sm);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  color: var(--accent-purple);
+  box-shadow: var(--neu-shadow-flat);
+}
+
+.btn-secondary:active:not(:disabled) {
+  box-shadow: var(--neu-shadow-pressed-sm);
+}
+
+/* Ghost / Icon Neumorphic Button */
+.btn-ghost {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  box-shadow: var(--neu-shadow-flat-sm);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  color: var(--text-primary);
+  box-shadow: var(--neu-shadow-flat);
+}
+
+.btn-ghost:active:not(:disabled) {
+  box-shadow: var(--neu-shadow-pressed-sm);
+}
+
+.btn-sm {
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-lg {
+  padding: 14px 28px;
+  font-size: 1rem;
+  border-radius: var(--radius-md);
+}
+
+/* ── Form Controls (Sunken Inset Neumorphic) ─────────────── */
+.form-group {
+  margin-bottom: var(--space-md);
+}
+
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 12px 18px;
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-pressed);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--accent-purple);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 42px;
+}
+
+.form-select option {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* ── Search Bar (Sunken Pill) ───────────────────────────── */
+.search-bar {
+  position: relative;
+  margin-bottom: var(--space-lg);
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 14px 20px 14px 48px;
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-pressed);
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 0.95rem;
+  font-weight: 500;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.search-bar input:focus {
+  border-color: var(--accent-purple);
+}
+
+.search-bar .search-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+}
+
+/* ── Neumorphic Tables ───────────────────────────────────── */
+.table-container {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--neu-shadow-flat);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: var(--bg-sunken);
+}
+
+th {
+  text-align: left;
+  padding: 14px 20px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border-default);
+}
+
+td {
+  padding: 14px 20px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--border-default);
+  color: var(--text-primary);
+}
+
+tbody tr {
+  transition: background var(--transition-fast);
+}
+
+tbody tr:hover {
+  background: rgba(123, 97, 255, 0.04);
+}
+
+/* ── Neumorphic Badges & Status Slots ────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: var(--neu-shadow-pressed-sm);
+  background: var(--bg-card);
+  text-transform: capitalize;
+}
+
+.badge-status-not_contacted {
+  color: var(--accent-amber);
+}
+
+.badge-status-contacted {
+  color: var(--accent-blue);
+}
+
+.badge-status-follow_up {
+  color: var(--accent-purple);
+}
+
+.badge-status-converted {
+  color: var(--accent-green);
+}
+
+.badge-status-lost {
+  color: var(--accent-red);
+}
+
+.badge-priority-high {
+  color: var(--accent-red);
+}
+
+.badge-priority-medium {
+  color: var(--accent-amber);
+}
+
+.badge-priority-low {
+  color: var(--accent-green);
+}
+
+/* ── Modal (Extruded Neumorphic Overlay) ─────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 20, 30, 0.4);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn var(--transition-fast);
+}
+
+.modal-content {
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-flat-lg);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  max-width: 620px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  border: 1px solid var(--border-subtle);
+  animation: slideUp var(--transition-base);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+
+.modal-header h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.modal-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-flat-sm);
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+  color: var(--accent-purple);
+  box-shadow: var(--neu-shadow-flat);
+}
+
+.modal-close:active {
+  box-shadow: var(--neu-shadow-pressed-sm);
+}
+
+/* ── Charts ─────────────────────────────────────────────── */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+
+@media (max-width: 900px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-card {
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-flat);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  border: 1px solid var(--border-subtle);
+}
+
+.chart-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+
+/* ── Chat Container ─────────────────────────────────────── */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 170px);
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-flat);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.chat-message {
+  max-width: 80%;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-lg);
+  animation: slideUp var(--transition-base);
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+
+.chat-message.user {
+  align-self: flex-end;
+  background: var(--accent-gradient-primary);
+  color: white;
+  box-shadow: var(--accent-gradient-glow);
+  border-bottom-right-radius: var(--space-xs);
+}
+
+.chat-message.assistant {
+  align-self: flex-start;
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-flat-sm);
+  border-bottom-left-radius: var(--space-xs);
+  color: var(--text-primary);
+  white-space: pre-wrap;
+}
+
+.chat-message.assistant .sources {
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-default);
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+}
+
+.chat-input-area {
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-default);
+  display: flex;
+  gap: var(--space-md);
+}
+
+.chat-input-area input {
+  flex: 1;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-pressed);
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.chat-input-area input:focus {
+  border-color: var(--accent-purple);
+}
+
+/* ── Anomaly Banner (Neumorphic Card Alert) ──────────────── */
+.anomaly-banner {
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-flat);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-xl);
+  border-left: 5px solid var(--accent-amber);
+}
+
+.anomaly-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+}
+
+.anomaly-item+.anomaly-item {
+  border-top: 1px solid var(--border-default);
+}
+
+.anomaly-item .anomaly-title {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.anomaly-item .anomaly-desc {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+/* ── Neumorphic Tabs (Slot Track + Raised Active Tab) ───── */
+.tabs {
+  display: flex;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xl);
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-pressed);
+  padding: 6px;
+  border-radius: var(--radius-full);
+  width: fit-content;
+}
+
+.tab {
+  padding: 10px 22px;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+  border: none;
+  background: none;
+  font-family: var(--font-family);
+}
+
+.tab:hover {
+  color: var(--text-primary);
+}
+
+.tab.active {
+  background: var(--bg-card);
+  color: var(--accent-purple);
+  box-shadow: var(--neu-shadow-flat-sm);
+}
+
+/* ── File Upload Drop Zone ──────────────────────────────── */
+.upload-zone {
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-pressed);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.upload-zone:hover {
+  box-shadow: var(--neu-shadow-pressed-sm);
+}
+
+.upload-zone p {
+  color: var(--text-secondary);
+  margin-top: var(--space-sm);
+}
+
+.upload-zone .upload-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-flat-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-md);
+  color: var(--accent-purple);
+}
+
+/* ── Score Gauge (Neumorphic Circle Extrusion) ──────────── */
+.score-gauge {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  box-shadow: var(--neu-shadow-flat);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-md);
+  position: relative;
+  padding: 8px;
+}
+
+.score-gauge::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-pressed-sm);
+}
+
+.score-gauge .score-value {
+  position: relative;
+  z-index: 1;
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+/* ── Toast Notification ─────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: var(--space-xl);
+  right: var(--space-xl);
+  padding: 14px 24px;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 700;
+  z-index: 2000;
+  box-shadow: var(--neu-shadow-flat-lg);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  animation: slideUp var(--transition-base);
+}
+
+/* ── Theme Switcher Button ──────────────────────────────── */
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-flat-sm);
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-top: var(--space-md);
+}
+
+.theme-toggle-btn:hover {
+  color: var(--accent-purple);
+  box-shadow: var(--neu-shadow-flat);
+}
+
+.theme-toggle-btn:active {
+  box-shadow: var(--neu-shadow-pressed-sm);
+}
+
+/* ── Animations & Loading ───────────────────────────────── */
+.spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid var(--border-default);
+  border-top-color: var(--accent-purple);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.loading-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.loading-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-purple);
+  animation: bounce 1.4s infinite both;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.16s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.32s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce {
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* ── Custom App Scrollbar (Theme Matched) ────────────────── */
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-tertiary) var(--bg-sunken);
+}
+
+/* WebKit (Chrome, Edge, Safari, Brave) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-sunken);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-tertiary);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-sunken);
+  transition: background 200ms ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-purple);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--bg-sunken);
+}
