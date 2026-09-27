@@ -28,6 +28,10 @@ export default function Chat({ messages, setMessages }) {
     downloadCsvForExcel(filename, headers, rows);
   }
 
+  const MAX_TOKENS = 8192;
+  const totalTokensUsed = (messages || []).reduce((acc, m) => acc + (m.tokensUsed || 0), 0);
+  const tokensPercentage = Math.min(((totalTokensUsed / MAX_TOKENS) * 100), 100).toFixed(1);
+
   return (
     <div>
       <div className="page-header">
@@ -36,15 +40,22 @@ export default function Chat({ messages, setMessages }) {
           <p>Ask questions about your leads using natural language</p>
         </div>
 
-        {/* Export Chat History Button */}
-        <button
-          className="btn btn-secondary btn-sm"
-          onClick={handleExportChat}
-          disabled={!messages || messages.length <= 1}
-          title="Export conversation transcript for Excel"
-        >
-          <Download size={16} /> Export Chat
-        </button>
+        {/* Export Chat History Button and Token Usage */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {totalTokensUsed > 0 && (
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+              {tokensPercentage}% of tokens used
+            </span>
+          )}
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={handleExportChat}
+            disabled={!messages || messages.length <= 1}
+            title="Export conversation transcript for Excel"
+          >
+            <Download size={16} /> Export Chat
+          </button>
+        </div>
       </div>
 
       <ChatBox messages={messages} setMessages={setMessages} />

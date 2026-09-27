@@ -981,3 +981,32 @@ tbody tr:hover {
 ::-webkit-scrollbar-corner {
   background: var(--bg-sunken);
 }
+
+/* ── Loading Anomalies Badge & Spinner ───────────────────── */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+.loading-anomalies-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full, 9999px);
+  background: var(--bg-card);
+  box-shadow: var(--neu-shadow-flat-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-amber, #f59e0b);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  animation: fadeIn 300ms ease-in-out;
+}

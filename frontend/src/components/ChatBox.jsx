@@ -37,6 +37,7 @@ export default function ChatBox({ messages, setMessages }) {
           role: 'assistant',
           content: response.answer,
           sources: response.sources || [],
+          tokensUsed: response.tokens_used,
         },
       ]);
     } catch (err) {
@@ -85,6 +86,12 @@ export default function ChatBox({ messages, setMessages }) {
             {msg.sources && msg.sources.length > 0 && (
               <div className="sources">
                 📎 Sources: {msg.sources.join(', ')}
+              </div>
+            )}
+            
+            {msg.tokensUsed && (
+              <div style={{ fontSize: '0.7rem', opacity: 0.5, marginTop: '4px' }}>
+                ⚡ {msg.tokensUsed} tokens used
               </div>
             )}
           </div>

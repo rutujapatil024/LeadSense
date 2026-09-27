@@ -11,7 +11,7 @@ import { getAnomalies } from '../api';
 import { renderFormattedText, cleanText } from '../utils/formatText';
 import { downloadCsvForExcel } from '../utils/exportToExcel';
 
-export default function AnomalyBanner() {
+export default function AnomalyBanner({ onLoadingChange }) {
   const [anomalies, setAnomalies] = useState([]);
   const [expanded, setExpanded] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -19,16 +19,19 @@ export default function AnomalyBanner() {
   useEffect(() => {
     async function fetchAnomalies() {
       try {
+        setLoading(true);
+        if (onLoadingChange) onLoadingChange(true);
         const data = await getAnomalies();
         setAnomalies(data.anomalies || []);
       } catch (err) {
         console.error('Failed to fetch anomalies:', err);
       } finally {
         setLoading(false);
+        if (onLoadingChange) onLoadingChange(false);
       }
     }
     fetchAnomalies();
-  }, []);
+  }, [onLoadingChange]);
 
   // Export anomalies report as Excel-compatible CSV file
   function handleExportAnomalies() {

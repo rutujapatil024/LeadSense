@@ -99,6 +99,10 @@ class AskResponse(BaseModel):
         default_factory=list,
         description="Names of leads used as context for the answer"
     )
+    tokens_used: Optional[int] = Field(
+        default=None,
+        description="Total tokens used for this request"
+    )
 
 
 # ── Email Schemas ───────────────────────────────────────────

@@ -35,6 +35,7 @@ async def ask(request: AskRequest):
         return AskResponse(
             answer=result["answer"],
             sources=result["sources"],
+            tokens_used=result.get("tokens_used")
         )
     except Exception as e:
         logger.error(f"[ERROR] Ask endpoint failed: {e}")

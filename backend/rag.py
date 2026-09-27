@@ -130,7 +130,11 @@ async def ask_question(question: str) -> dict:
             "question": question,
         })
         answer = response.content
-        logger.info(f"[SUCCESS] LLM response generated ({len(answer)} chars)")
+        
+        usage = getattr(response, "usage_metadata", None)
+        tokens_used = usage.get("total_tokens") if usage else None
+        
+        logger.info(f"[SUCCESS] LLM response generated ({len(answer)} chars, {tokens_used} tokens)")
     except Exception as e:
         logger.error(f"[ERROR] LLM call failed: {e}")
         return {"answer": "Sorry, the AI service is temporarily unavailable. Please try again.", "sources": []}
@@ -138,4 +142,4 @@ async def ask_question(question: str) -> dict:
     # ── Step 5: Extract source lead names ──────────────────
     sources = [lead["name"] for lead in matching_leads]
 
-    return {"answer": answer, "sources": sources}
+    return {"answer": answer, "sources": sources, "tokens_used": tokens_used}

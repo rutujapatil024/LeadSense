@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { Users, UserCheck, UserX, TrendingUp, Download } from 'lucide-react';
+import { Users, UserCheck, UserX, TrendingUp, Download, Loader2 } from 'lucide-react';
 import AnomalyBanner from '../components/AnomalyBanner';
 import DashboardCharts from '../components/DashboardCharts';
 import { getLeads } from '../api';
@@ -15,6 +15,7 @@ import { downloadCsvForExcel } from '../utils/exportToExcel';
 export default function Dashboard() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [anomaliesLoading, setAnomaliesLoading] = useState(true);
 
   useEffect(() => {
     async function fetchLeads() {
@@ -70,19 +71,28 @@ export default function Dashboard() {
           <p>Your lead intelligence at a glance</p>
         </div>
 
-        {/* Export Dashboard Report Button */}
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={handleExportDashboardReport}
-          disabled={loading || leads.length === 0}
-          title="Export complete lead analytics report for Excel"
-        >
-          <Download size={16} /> Export Report
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {anomaliesLoading && (
+            <div className="loading-anomalies-badge">
+              <Loader2 size={14} className="spin-icon" />
+              <span>Loading Anomalies...</span>
+            </div>
+          )}
+
+          {/* Export Dashboard Report Button */}
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={handleExportDashboardReport}
+            disabled={loading || leads.length === 0}
+            title="Export complete lead analytics report for Excel"
+          >
+            <Download size={16} /> Export Report
+          </button>
+        </div>
       </div>
 
       {/* Anomaly Alerts */}
-      <AnomalyBanner />
+      <AnomalyBanner onLoadingChange={setAnomaliesLoading} />
 
       {/* Stat Cards */}
       <div className="stats-grid">
