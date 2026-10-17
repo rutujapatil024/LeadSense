@@ -41,7 +41,7 @@ export default function Chat({ messages, setMessages }) {
         </div>
 
         {/* Export Chat History Button and Token Usage */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="page-header-actions">
           {totalTokensUsed > 0 && (
             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
               {tokensPercentage}% of tokens used

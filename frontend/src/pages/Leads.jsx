@@ -113,14 +113,16 @@ export default function Leads() {
         </div>
 
         {/* Export to Excel Button */}
-        <button
-          className="btn btn-secondary btn-sm"
-          onClick={handleExportLeadsToExcel}
-          disabled={loading || leads.length === 0}
-          title="Export all leads to Excel CSV format"
-        >
-          <Download size={16} /> Export to Excel
-        </button>
+        <div className="page-header-actions">
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={handleExportLeadsToExcel}
+            disabled={loading || leads.length === 0}
+            title="Export all leads to Excel CSV format"
+          >
+            <Download size={16} /> Export to Excel
+          </button>
+        </div>
       </div>
 
       {loading ? (

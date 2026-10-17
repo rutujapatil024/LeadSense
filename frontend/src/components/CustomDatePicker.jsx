@@ -152,6 +152,7 @@ export default function CustomDatePicker({
             top: 'calc(100% + 6px)',
             left: 0,
             width: 290,
+            maxWidth: 'calc(100vw - 36px)',
             background: 'var(--bg-card)',
             boxShadow: 'var(--neu-shadow-flat-lg)',
             borderRadius: 'var(--radius-lg)',

@@ -242,7 +242,7 @@ export default function AddLeadForm() {
   return (
     <div>
       <form onSubmit={handleSubmit} className="card" style={{ maxWidth: 720 }} noValidate>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
+        <div className="responsive-form-grid">
           {/* Name */}
           <div className="form-group">
             <label className="form-label" htmlFor="lead-name">

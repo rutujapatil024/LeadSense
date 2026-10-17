@@ -112,15 +112,9 @@ export default function LeadTable({
   return (
     <div>
       {/* ── Search & Filter Controls Toolbar ──────────────── */}
-      <div style={{
-        display: 'flex',
-        gap: 12,
-        marginBottom: 'var(--space-md)',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-      }}>
+      <div className="lead-table-toolbar">
         {/* Search Input */}
-        <div className="search-bar" style={{ flex: 1, minWidth: 260, marginBottom: 0 }}>
+        <div className="search-bar" style={{ flex: 1, minWidth: 200, marginBottom: 0 }}>
           <Search size={18} className="search-icon" />
           <input
             id="lead-search"
@@ -131,25 +125,27 @@ export default function LeadTable({
           />
         </div>
 
-        {/* Custom Status Filter Dropdown */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <Filter size={16} color="var(--accent-purple)" />
-          <CustomSelect
-            options={statusFilterOptions}
-            value={statusFilter}
-            onChange={(val) => setStatusFilter(val)}
-            style={{ width: 160 }}
-          />
-        </div>
+        <div className="lead-table-filter-group">
+          {/* Custom Status Filter Dropdown */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1 }}>
+            <Filter size={16} color="var(--accent-purple)" style={{ flexShrink: 0 }} />
+            <CustomSelect
+              options={statusFilterOptions}
+              value={statusFilter}
+              onChange={(val) => setStatusFilter(val)}
+              style={{ width: '100%', minWidth: 130 }}
+            />
+          </div>
 
-        {/* Custom Priority Filter Dropdown */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <CustomSelect
-            options={priorityFilterOptions}
-            value={priorityFilter}
-            onChange={(val) => setPriorityFilter(val)}
-            style={{ width: 150 }}
-          />
+          {/* Custom Priority Filter Dropdown */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1 }}>
+            <CustomSelect
+              options={priorityFilterOptions}
+              value={priorityFilter}
+              onChange={(val) => setPriorityFilter(val)}
+              style={{ width: '100%', minWidth: 120 }}
+            />
+          </div>
         </div>
       </div>
 

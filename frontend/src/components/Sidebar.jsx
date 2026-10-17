@@ -1,10 +1,14 @@
 /**
- * Sidebar.jsx — Neumorphic Navigation Sidebar
+ * Sidebar.jsx — Responsive Navigation System
  * ============================================
- * Left sidebar with navigation links, branding, and theme toggle.
- * Clean layout without authentication widgets.
+ * Provides:
+ *  1. Desktop Neumorphic Sidebar (fixed left for screens > 860px)
+ *  2. Mobile Top Bar with Logo, Theme toggle & Hamburger menu
+ *  3. Mobile Slide-out Drawer with backdrop blur
+ *  4. Mobile Bottom Tab Bar for effortless one-handed thumb navigation
  */
 
+import { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -14,6 +18,8 @@ import {
   Sparkles,
   Sun,
   Moon,
+  Menu,
+  X,
 } from 'lucide-react';
 
 const navItems = [
@@ -25,22 +31,150 @@ const navItems = [
 
 export default function Sidebar({ theme, toggleTheme }) {
   const location = useLocation();
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+
+  // Auto-close mobile drawer on route transition
+  useEffect(() => {
+    setMobileDrawerOpen(false);
+  }, [location.pathname]);
+
+  // Lock body scroll when mobile drawer is open
+  useEffect(() => {
+    if (mobileDrawerOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileDrawerOpen]);
 
   return (
-    <aside style={styles.sidebar}>
-      {/* ── Brand Logo ──────────────────────────────── */}
-      <div style={styles.brand}>
-        <div style={styles.logoIcon}>
-          <Sparkles size={22} />
-        </div>
-        <div>
-          <h1 style={styles.brandName}>LeadSense</h1>
-          <p style={styles.brandTag}>AI Lead Intelligence</p>
-        </div>
-      </div>
+    <>
+      {/* ── Mobile Top Header (<= 860px) ────────────────── */}
+      <header className="mobile-topbar">
+        <Link to="/" className="mobile-brand" onClick={() => setMobileDrawerOpen(false)}>
+          <div className="mobile-logo-icon">
+            <Sparkles size={18} />
+          </div>
+          <span className="mobile-brand-name">LeadSense</span>
+        </Link>
 
-      {/* ── Navigation Links ────────────────────────── */}
-      <nav style={styles.nav}>
+        <div className="mobile-topbar-actions">
+          {/* Quick theme toggle */}
+          <button
+            className="mobile-action-btn"
+            onClick={toggleTheme}
+            aria-label="Toggle Theme"
+            title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+          >
+            {theme === 'light' ? (
+              <Sun size={17} color="var(--accent-amber)" />
+            ) : (
+              <Moon size={17} color="var(--accent-purple)" />
+            )}
+          </button>
+
+          {/* Hamburger Drawer Toggle */}
+          <button
+            className="mobile-action-btn"
+            onClick={() => setMobileDrawerOpen(!mobileDrawerOpen)}
+            aria-label="Toggle navigation menu"
+          >
+            {mobileDrawerOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </header>
+
+      {/* ── Mobile Drawer Backdrop ────────────────────── */}
+      {mobileDrawerOpen && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setMobileDrawerOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* ── Sidebar (Desktop Fixed / Mobile Slide-out Drawer) ── */}
+      <aside className={`app-sidebar ${mobileDrawerOpen ? 'mobile-open' : ''}`}>
+        {/* Mobile Drawer Close Header */}
+        <div className="mobile-drawer-header">
+          <div className="sidebar-brand-inner">
+            <div className="sidebar-logo-icon">
+              <Sparkles size={20} />
+            </div>
+            <div>
+              <div className="sidebar-brand-name">LeadSense</div>
+              <div className="sidebar-brand-tag">AI Lead Intelligence</div>
+            </div>
+          </div>
+          <button
+            className="modal-close mobile-drawer-close-btn"
+            onClick={() => setMobileDrawerOpen(false)}
+            aria-label="Close menu"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Desktop Brand Header */}
+        <div className="sidebar-desktop-brand">
+          <div className="sidebar-logo-icon">
+            <Sparkles size={22} />
+          </div>
+          <div>
+            <h1 className="sidebar-brand-name">LeadSense</h1>
+            <p className="sidebar-brand-tag">AI Lead Intelligence</p>
+          </div>
+        </div>
+
+        {/* Navigation Links */}
+        <nav className="sidebar-nav">
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`sidebar-nav-link ${isActive ? 'active' : ''}`}
+                onClick={() => setMobileDrawerOpen(false)}
+              >
+                <Icon
+                  size={19}
+                  color={isActive ? 'var(--accent-purple)' : 'var(--text-secondary)'}
+                />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Theme Toggle Button */}
+        <button
+          className="theme-toggle-btn"
+          onClick={toggleTheme}
+          title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+        >
+          <div className="toggle-knob">
+            {theme === 'light' ? (
+              <Sun size={16} color="var(--accent-amber)" />
+            ) : (
+              <Moon size={16} color="var(--accent-purple)" />
+            )}
+          </div>
+          <span>{theme === 'light' ? 'Light Mode' : 'Dark Mode'}</span>
+        </button>
+
+        {/* Footer */}
+        <div className="sidebar-footer">
+          <p className="sidebar-footer-text">LeadSense v1.0</p>
+        </div>
+      </aside>
+
+      {/* ── Mobile Bottom Navigation Bar (<= 860px) ───── */}
+      <nav className="mobile-bottom-nav">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
           const Icon = item.icon;
@@ -48,137 +182,16 @@ export default function Sidebar({ theme, toggleTheme }) {
             <Link
               key={item.path}
               to={item.path}
-              style={{
-                ...styles.navLink,
-                ...(isActive ? styles.navLinkActive : {}),
-              }}
+              className={`mobile-bottom-tab ${isActive ? 'active' : ''}`}
             >
-              <Icon size={19} color={isActive ? 'var(--accent-purple)' : 'var(--text-secondary)'} />
-              <span>{item.label}</span>
+              <div className="mobile-tab-icon-wrap">
+                <Icon size={20} />
+              </div>
+              <span className="mobile-tab-label">{item.label}</span>
             </Link>
           );
         })}
       </nav>
-
-      {/* ── Theme Toggle Button ──────────────────────── */}
-      <button
-        className="theme-toggle-btn"
-        onClick={toggleTheme}
-        title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-      >
-        <div style={styles.toggleKnob}>
-          {theme === 'light' ? (
-            <Sun size={16} color="var(--accent-amber)" />
-          ) : (
-            <Moon size={16} color="var(--accent-purple)" />
-          )}
-        </div>
-        <span>{theme === 'light' ? 'Light Mode' : 'Dark Mode'}</span>
-      </button>
-
-      {/* ── Footer ──────────────────────────────────── */}
-      <div style={styles.footer}>
-        <p style={styles.footerText}>LeadSense v1.0</p>
-        {/* <p style={styles.footerSubtext}></p> */}
-      </div>
-    </aside>
+    </>
   );
 }
-
-const styles = {
-  sidebar: {
-    width: 'var(--sidebar-width)',
-    height: '100vh',
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    background: 'var(--bg-card)',
-    boxShadow: 'var(--neu-shadow-flat)',
-    display: 'flex',
-    flexDirection: 'column',
-    padding: 'var(--space-lg) var(--space-md)',
-    zIndex: 100,
-    borderRight: '1px solid var(--border-subtle)',
-  },
-  brand: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 'var(--space-sm)',
-    padding: 'var(--space-xs) var(--space-xs)',
-    marginBottom: 'var(--space-xl)',
-  },
-  logoIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 'var(--radius-md)',
-    background: 'var(--accent-gradient-primary)',
-    boxShadow: 'var(--accent-gradient-glow)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: 'white',
-    flexShrink: 0,
-  },
-  brandName: {
-    fontSize: '1.25rem',
-    fontWeight: 800,
-    color: 'var(--text-primary)',
-    lineHeight: 1.2,
-    letterSpacing: '-0.02em',
-  },
-  brandTag: {
-    fontSize: '0.72rem',
-    color: 'var(--text-tertiary)',
-    fontWeight: 600,
-  },
-  nav: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 'var(--space-md)',
-    flex: 1,
-  },
-  navLink: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 'var(--space-md)',
-    padding: '12px 16px',
-    borderRadius: 'var(--radius-md)',
-    color: 'var(--text-secondary)',
-    fontSize: '0.9rem',
-    fontWeight: 600,
-    textDecoration: 'none',
-    transition: 'all 200ms ease',
-    background: 'transparent',
-  },
-  navLinkActive: {
-    background: 'var(--bg-card)',
-    boxShadow: 'var(--neu-shadow-flat-sm)',
-    color: 'var(--accent-purple)',
-    fontWeight: 800,
-  },
-  toggleKnob: {
-    width: 30,
-    height: 30,
-    borderRadius: '50%',
-    background: 'var(--bg-card)',
-    boxShadow: 'var(--neu-shadow-flat-sm)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  footer: {
-    paddingTop: 'var(--space-md)',
-    borderTop: '1px solid var(--border-default)',
-    marginTop: 'var(--space-md)',
-  },
-  footerText: {
-    fontSize: '0.75rem',
-    color: 'var(--text-tertiary)',
-    fontWeight: 600,
-  },
-  footerSubtext: {
-    fontSize: '0.7rem',
-    color: 'var(--text-muted)',
-    marginTop: 2,
-  },
-};

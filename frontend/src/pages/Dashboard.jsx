@@ -16,6 +16,17 @@ export default function Dashboard() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [anomaliesLoading, setAnomaliesLoading] = useState(true);
+  const [wakingUpNotice, setWakingUpNotice] = useState(false);
+
+  useEffect(() => {
+    let timer;
+    if (loading) {
+      timer = setTimeout(() => setWakingUpNotice(true), 3500);
+    } else {
+      setWakingUpNotice(false);
+    }
+    return () => clearTimeout(timer);
+  }, [loading]);
 
   useEffect(() => {
     async function fetchLeads() {
@@ -71,7 +82,7 @@ export default function Dashboard() {
           <p>Your lead intelligence at a glance</p>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="page-header-actions">
           {anomaliesLoading && (
             <div className="loading-anomalies-badge">
               <Loader2 size={14} className="spin-icon" />
@@ -120,9 +131,24 @@ export default function Dashboard() {
 
       {/* Charts */}
       {loading ? (
-        <div style={{ textAlign: 'center', padding: 'var(--space-2xl)' }}>
+        <div style={{ textAlign: 'center', padding: 'var(--space-2xl) var(--space-md)' }}>
           <div className="spinner" style={{ margin: '0 auto 12px' }}></div>
-          <p style={{ color: 'var(--text-secondary)' }}>Loading dashboard data...</p>
+          <p style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>Loading dashboard data...</p>
+          {wakingUpNotice && (
+            <div style={{
+              marginTop: 14,
+              fontSize: '0.84rem',
+              color: 'var(--accent-amber)',
+              background: 'var(--bg-card)',
+              padding: '8px 16px',
+              borderRadius: 'var(--radius-full)',
+              boxShadow: 'var(--neu-shadow-flat-sm)',
+              display: 'inline-block',
+              animation: 'fadeIn 300ms ease'
+            }}>
+              ☕ Waking up cloud server (Render free tier takes ~30s on first load)...
+            </div>
+          )}
         </div>
       ) : (
         <DashboardCharts leads={leads} />

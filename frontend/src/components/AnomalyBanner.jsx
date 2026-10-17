@@ -79,7 +79,7 @@ export default function AnomalyBanner({ onLoadingChange }) {
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div className="page-header-actions" style={{ marginLeft: 'auto' }}>
           {/* Export Report Button */}
           <button
             className="btn btn-secondary btn-sm"
@@ -111,7 +111,7 @@ export default function AnomalyBanner({ onLoadingChange }) {
           paddingTop: 'var(--space-md)',
           borderTop: '1px solid var(--border-default)',
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
           gap: 'var(--space-md)',
         }}>
           {anomalies.map((anomaly, i) => (

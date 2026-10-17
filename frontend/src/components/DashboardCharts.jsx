@@ -5,6 +5,7 @@
  * Handles invalid or malformed enquiry dates safely.
  */
 
+import { useState, useEffect } from 'react';
 import {
   BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -26,6 +27,16 @@ const tooltipStyle = {
 };
 
 export default function DashboardCharts({ leads }) {
+  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 640 : false));
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth < 640);
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   if (!leads || leads.length === 0) {
     return (
       <div className="empty-state card">
@@ -138,18 +149,22 @@ export default function DashboardCharts({ leads }) {
       {/* 3. Leads by Source */}
       <div className="chart-card">
         <h3>Lead Sources</h3>
-        <ResponsiveContainer width="100%" height={260}>
+        <ResponsiveContainer width="100%" height={isMobile ? 240 : 260}>
           <PieChart>
             <Pie
               data={sourceData}
               cx="50%"
               cy="50%"
-              outerRadius={95}
-              innerRadius={55}
+              outerRadius={isMobile ? 70 : 92}
+              innerRadius={isMobile ? 42 : 54}
               paddingAngle={4}
               dataKey="value"
-              label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-              labelLine={{ stroke: 'var(--text-tertiary)' }}
+              label={
+                isMobile
+                  ? ({ percent }) => `${(percent * 100).toFixed(0)}%`
+                  : ({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`
+              }
+              labelLine={!isMobile}
             >
               {sourceData.map((_, i) => (
                 <Cell key={i} fill={COLORS[i % COLORS.length]} />

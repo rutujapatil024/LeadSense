@@ -88,7 +88,7 @@ export default function EditLeadModal({ lead, onSave, onClose }) {
         )}
 
         <form onSubmit={handleSubmit}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+          <div className="responsive-form-grid">
             <div className="form-group">
               <label className="form-label" htmlFor="edit-name">Full Name</label>
               <input
