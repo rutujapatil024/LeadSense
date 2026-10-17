@@ -26,3 +26,7 @@ Thumbs.db
 # Model cache
 *.bin
 *.onnx
+
+# Tooling / Code Graph
+.codegraph/
+codegraph_visual.html

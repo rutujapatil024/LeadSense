@@ -4,8 +4,8 @@
  * All backend API calls go through this file.
  * Points to http://localhost:8000 (the FastAPI backend).
  */
-
-const API_BASE = 'http://localhost:8000';
+// Points to backend URL set via environment variable, or falls back to localhost:8000
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/+$/, '');
 
 /**
  * Generic fetch wrapper with error handling.
