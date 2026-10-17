@@ -68,9 +68,9 @@ export default function AddLeadForm() {
       case 'name': {
         const trimmed = (value || '').trim();
         if (!trimmed) return 'Full Name is required.';
-        if (trimmed.length < 2) return 'Full Name must be at least 2 characters.';
+        if (trimmed.length < 2) return 'Enter valid name';
         if (!/^[A-Za-z\s.'-]+$/.test(trimmed)) {
-          return 'Full Name should only contain letters and spaces.';
+          return 'Enter valid name';
         }
         if (trimmed.length > 60) return 'Full Name cannot exceed 60 characters.';
         return '';
@@ -80,7 +80,7 @@ export default function AddLeadForm() {
         const digits = (value || '').replace(/\D/g, '');
         if (!digits) return 'Contact number is required.';
         if (digits.length < 10) {
-          return `Contact must be exactly 10 digits (${digits.length}/10 entered).`;
+          return 'Contact must be a valid 10-digit number.';
         }
         if (digits.length > 10) {
           return 'Contact cannot exceed 10 digits.';
@@ -270,7 +270,7 @@ export default function AddLeadForm() {
           {/* Contact (Strict 10 Digits Max) */}
           <div className="form-group">
             <label className="form-label" htmlFor="lead-contact">
-              Contact (10-Digit Mobile) *
+              Contact *
             </label>
             <input
               id="lead-contact"
@@ -285,12 +285,6 @@ export default function AddLeadForm() {
               placeholder="e.g., 9876543210"
               required
             />
-            <div className="form-hint">
-              <span>{touched.contact && errors.contact ? '' : 'Numbers only, max 10 digits'}</span>
-              <span style={{ fontWeight: 600, color: form.contact.length === 10 ? 'var(--accent-green)' : 'inherit' }}>
-                {form.contact.length}/10 digits
-              </span>
-            </div>
             {touched.contact && errors.contact && (
               <div className="form-error-msg">
                 <AlertCircle size={14} />
