@@ -1,0 +1,13 @@
+.git
+.github
+frontend
+node_modules
+.codegraph
+codegraph_visual.html
+backend/.env
+backend/__pycache__
+*.pyc
+*.pyo
+*.pyd
+.venv
+venv

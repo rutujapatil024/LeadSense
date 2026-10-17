@@ -36,9 +36,8 @@ git push origin main
 4. Configure the settings:
    - **Name**: `leadsense-backend` (or your choice)
    - **Language**: `Docker`
-   - **Root Directory**: Leave blank or set to `backend`
-   - **Dockerfile Path**: `./backend/Dockerfile`
-   - **Docker Context**: `./backend`
+   - **Root Directory**: Leave blank (default)
+   - **Dockerfile Path**: `./Dockerfile` (default)
    - **Instance Type**: `Free`
 5. Scroll down to **Environment Variables** and add the following keys from your `backend/.env`:
    - `SUPABASE_URL` = *(Your Supabase project URL)*
