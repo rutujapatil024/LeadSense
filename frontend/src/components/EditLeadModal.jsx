@@ -41,7 +41,11 @@ export default function EditLeadModal({ lead, onSave, onClose }) {
 
   function handleChange(e) {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    let sanitized = value;
+    if (name === 'contact') {
+      sanitized = value.replace(/\D/g, '').slice(0, 10);
+    }
+    setFormData((prev) => ({ ...prev, [name]: sanitized }));
   }
 
   function handleSelectChange(name, val) {
@@ -50,6 +54,10 @@ export default function EditLeadModal({ lead, onSave, onClose }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (formData.contact && formData.contact.replace(/\D/g, '').length < 10) {
+      setError('Contact must be a valid 10-digit mobile number.');
+      return;
+    }
     setLoading(true);
     setError(null);
 
@@ -99,10 +107,13 @@ export default function EditLeadModal({ lead, onSave, onClose }) {
               <input
                 id="edit-contact"
                 name="contact"
-                type="text"
+                type="tel"
+                inputMode="numeric"
+                maxLength={10}
                 className="form-input"
                 value={formData.contact}
                 onChange={handleChange}
+                placeholder="10-digit mobile"
                 required
               />
             </div>

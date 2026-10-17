@@ -405,6 +405,32 @@ body {
   min-height: 90px;
 }
 
+.form-input.is-invalid,
+.form-textarea.is-invalid {
+  border-color: var(--accent-red) !important;
+  box-shadow: inset 3px 3px 6px rgba(239, 68, 68, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.6) !important;
+}
+
+.form-error-msg {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-red);
+  margin-top: 6px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.form-hint {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+}
+
 /* ── Search Bar (Sunken Pill) ───────────────────────────── */
 .search-bar {
   position: relative;

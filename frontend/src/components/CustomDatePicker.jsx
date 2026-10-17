@@ -21,6 +21,7 @@ export default function CustomDatePicker({
   placeholder = 'Select date',
   required = false,
   id,
+  isInvalid = false,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   
@@ -116,7 +117,7 @@ export default function CustomDatePicker({
       <div
         id={id}
         onClick={() => setIsOpen(!isOpen)}
-        className="form-input"
+        className={`form-input ${isInvalid ? 'is-invalid' : ''}`}
         style={{
           display: 'flex',
           alignItems: 'center',
