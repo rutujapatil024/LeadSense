@@ -10,24 +10,26 @@ import {
   BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
+import { ChartNoAxesCombined } from 'lucide-react';
 
 const COLORS = [
-  '#7b61ff', '#4f80ff', '#06b6d4', '#f59e0b', '#ef4444',
-  '#ec4899', '#10b981', '#a78bfa',
+  'var(--chart-series-1)', 'var(--chart-series-2)', 'var(--chart-series-3)',
+  'var(--chart-series-4)', 'var(--chart-series-5)', 'var(--chart-series-6)',
 ];
 
 const tooltipStyle = {
   backgroundColor: 'var(--chart-tooltip-bg)',
-  border: '1px solid var(--border-default)',
-  borderRadius: '12px',
-  boxShadow: 'var(--neu-shadow-flat-sm)',
+  border: '1px solid var(--border-strong)',
+  borderRadius: '0',
+  boxShadow: 'var(--shadow-sm)',
   fontSize: '12px',
   fontWeight: '600',
-  color: 'var(--text-primary)',
+  color: 'var(--text)',
 };
 
 export default function DashboardCharts({ leads }) {
   const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 640 : false));
+  const [reducedMotion, setReducedMotion] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   useEffect(() => {
     function handleResize() {
@@ -37,12 +39,19 @@ export default function DashboardCharts({ leads }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleMotionPreference = () => setReducedMotion(preference.matches);
+    preference.addEventListener('change', handleMotionPreference);
+    return () => preference.removeEventListener('change', handleMotionPreference);
+  }, []);
+
   if (!leads || leads.length === 0) {
     return (
       <div className="empty-state card">
-        <div className="empty-icon">📊</div>
+        <div className="empty-icon"><ChartNoAxesCombined size={26} /></div>
         <h3>No Lead Data Found</h3>
-        <p>Add new leads to populate your soft UI analytics dashboard.</p>
+        <p>Add leads to see a summary of your pipeline activity.</p>
       </div>
     );
   }
@@ -123,7 +132,7 @@ export default function DashboardCharts({ leads }) {
             <XAxis dataKey="name" tick={{ fill: 'var(--text-secondary)', fontSize: 11, fontWeight: 600 }} />
             <YAxis tick={{ fill: 'var(--text-secondary)', fontSize: 11, fontWeight: 600 }} />
             <Tooltip contentStyle={tooltipStyle} />
-            <Bar dataKey="count" radius={[8, 8, 0, 0]}>
+            <Bar dataKey="count" isAnimationActive={!reducedMotion} animationDuration={850} animationEasing="ease-out">
               {statusData.map((_, i) => (
                 <Cell key={i} fill={COLORS[i % COLORS.length]} />
               ))}
@@ -141,7 +150,7 @@ export default function DashboardCharts({ leads }) {
             <XAxis type="number" tick={{ fill: 'var(--text-secondary)', fontSize: 11, fontWeight: 600 }} />
             <YAxis type="category" dataKey="name" tick={{ fill: 'var(--text-secondary)', fontSize: 11, fontWeight: 600 }} width={85} />
             <Tooltip contentStyle={tooltipStyle} />
-            <Bar dataKey="count" radius={[0, 8, 8, 0]} fill="var(--accent-purple)" />
+            <Bar dataKey="count" fill="var(--accent)" isAnimationActive={!reducedMotion} animationDuration={850} animationEasing="ease-out" />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -183,8 +192,8 @@ export default function DashboardCharts({ leads }) {
             <AreaChart data={trendData}>
               <defs>
                 <linearGradient id="colorLeads" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="var(--accent-purple)" stopOpacity={0.35} />
-                  <stop offset="95%" stopColor="var(--accent-purple)" stopOpacity={0} />
+                  <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.14} />
+                  <stop offset="95%" stopColor="var(--accent)" stopOpacity={0.015} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
@@ -194,9 +203,12 @@ export default function DashboardCharts({ leads }) {
               <Area
                 type="monotone"
                 dataKey="leads"
-                stroke="var(--accent-purple)"
-                strokeWidth={3}
+                stroke="var(--accent)"
+                strokeWidth={2.5}
                 fill="url(#colorLeads)"
+                isAnimationActive={!reducedMotion}
+                animationDuration={1400}
+                animationEasing="ease-out"
               />
             </AreaChart>
           </ResponsiveContainer>

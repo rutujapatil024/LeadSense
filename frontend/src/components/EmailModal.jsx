@@ -29,7 +29,7 @@ export default function EmailModal({ lead, email, loading, onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>📧 Follow-Up Email for {lead?.name}</h2>
+          <h2>Follow-Up Email for {lead?.name}</h2>
           <button className="modal-close" onClick={onClose}>
             <X size={18} />
           </button>

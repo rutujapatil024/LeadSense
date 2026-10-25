@@ -129,11 +129,26 @@ async def bulk_upload_leads(file: UploadFile = File(...)):
 async def list_leads():
     """List all leads from the database."""
     try:
-        result = supabase.table("leads").select(
-            "id, name, contact, location, source, status, priority, "
-            "enquiry_date, last_contacted_date, notes, summary_text, created_at"
-        ).order("created_at", desc=True).execute()
-        return result.data
+        page_size = 1000
+        all_leads = []
+        start = 0
+
+        while True:
+            result = supabase.table("leads").select(
+                "id, name, contact, location, source, status, priority, "
+                "enquiry_date, last_contacted_date, notes, summary_text, created_at"
+            ).order("created_at", desc=True).order("id", desc=True).range(
+                start, start + page_size - 1
+            ).execute()
+
+            page = result.data or []
+            all_leads.extend(page)
+            if len(page) < page_size:
+                break
+            start += page_size
+
+        logger.info(f"[LEADS] Returned {len(all_leads)} leads")
+        return all_leads
     except Exception as e:
         logger.error(f"[ERROR] Failed to list leads: {e}")
         raise HTTPException(status_code=500, detail=str(e))

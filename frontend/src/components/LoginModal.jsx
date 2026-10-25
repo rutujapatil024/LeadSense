@@ -43,7 +43,7 @@ export default function LoginModal({ onClose, onLogin }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 440 }}>
         <div className="modal-header">
-          <h2>🔐 Sign In to LeadSense</h2>
+          <h2>Sign In to LeadSense</h2>
           <button className="modal-close" onClick={onClose}>
             <X size={18} />
           </button>

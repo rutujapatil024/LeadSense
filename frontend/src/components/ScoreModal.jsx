@@ -15,9 +15,9 @@ function getScoreColor(score) {
 }
 
 function getScoreLabel(score) {
-  if (score >= 70) return 'Hot Lead 🔥';
-  if (score >= 40) return 'Warm Lead ☀️';
-  return 'Cold Lead ❄️';
+  if (score >= 70) return 'Hot Lead';
+  if (score >= 40) return 'Warm Lead';
+  return 'Cold Lead';
 }
 
 export default function ScoreModal({ lead, scoreData, loading, onClose }) {
@@ -27,7 +27,7 @@ export default function ScoreModal({ lead, scoreData, loading, onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>📊 Lead Score: {lead?.name}</h2>
+          <h2>Lead Score: {lead?.name}</h2>
           <button className="modal-close" onClick={onClose}>
             <X size={18} />
           </button>

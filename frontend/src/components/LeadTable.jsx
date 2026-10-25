@@ -206,9 +206,11 @@ export default function LeadTable({
 
                   <td style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
                     {(() => {
-                      if (!lead.enquiry_date) return '—';
+                      if (!lead.enquiry_date) return 'Not set';
                       const d = new Date(lead.enquiry_date);
-                      return !isNaN(d.getTime()) ? d.toLocaleDateString('en-IN') : lead.enquiry_date;
+                      return !isNaN(d.getTime())
+                        ? new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).format(d)
+                        : 'Not set';
                     })()}
                   </td>
 

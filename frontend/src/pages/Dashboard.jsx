@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { Users, UserCheck, UserX, TrendingUp, Download, Loader2 } from 'lucide-react';
 import AnomalyBanner from '../components/AnomalyBanner';
 import DashboardCharts from '../components/DashboardCharts';
+import StatCard from '../components/StatCard';
 import { getLeads } from '../api';
 import { downloadCsvForExcel } from '../utils/exportToExcel';
 
@@ -19,12 +20,8 @@ export default function Dashboard() {
   const [wakingUpNotice, setWakingUpNotice] = useState(false);
 
   useEffect(() => {
-    let timer;
-    if (loading) {
-      timer = setTimeout(() => setWakingUpNotice(true), 3500);
-    } else {
-      setWakingUpNotice(false);
-    }
+    if (!loading) return undefined;
+    const timer = setTimeout(() => setWakingUpNotice(true), 3500);
     return () => clearTimeout(timer);
   }, [loading]);
 
@@ -107,26 +104,10 @@ export default function Dashboard() {
 
       {/* Stat Cards */}
       <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-label">Total Leads</div>
-          <div className="stat-value">{loading ? '—' : totalLeads}</div>
-          <div className="stat-icon"><Users size={24} /></div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Converted ({conversionRate}%)</div>
-          <div className="stat-value">{loading ? '—' : converted}</div>
-          <div className="stat-icon"><UserCheck size={24} /></div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Not Contacted</div>
-          <div className="stat-value">{loading ? '—' : notContacted}</div>
-          <div className="stat-icon"><UserX size={24} /></div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">High Priority</div>
-          <div className="stat-value">{loading ? '—' : highPriority}</div>
-          <div className="stat-icon"><TrendingUp size={24} /></div>
-        </div>
+        <StatCard label="Total leads" value={loading ? 0 : totalLeads} detail="Across your pipeline" icon={Users} />
+        <StatCard label="Converted" value={loading ? 0 : converted} detail={`${conversionRate}% conversion rate`} icon={UserCheck} />
+        <StatCard label="Not contacted" value={loading ? 0 : notContacted} detail="Ready for first touch" icon={UserX} />
+        <StatCard label="High priority" value={loading ? 0 : highPriority} detail="Needs focused follow-up" icon={TrendingUp} />
       </div>
 
       {/* Charts */}
@@ -134,7 +115,7 @@ export default function Dashboard() {
         <div style={{ textAlign: 'center', padding: 'var(--space-2xl) var(--space-md)' }}>
           <div className="spinner" style={{ margin: '0 auto 12px' }}></div>
           <p style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>Loading dashboard data...</p>
-          {wakingUpNotice && (
+          {loading && wakingUpNotice && (
             <div style={{
               marginTop: 14,
               fontSize: '0.84rem',
@@ -146,7 +127,7 @@ export default function Dashboard() {
               display: 'inline-block',
               animation: 'fadeIn 300ms ease'
             }}>
-              ☕ Waking up cloud server (Render free tier takes ~30s on first load)...
+              Connecting to the lead workspace. The first request may take a moment.
             </div>
           )}
         </div>

@@ -11,13 +11,24 @@ Why this model?
 - Good quality for semantic similarity in English text
 """
 
-from sentence_transformers import SentenceTransformer
+from threading import Lock
 
-# Load the model ONCE at module level (not per-request).
-# First run downloads ~80 MB; subsequent runs use the cached model.
-print("[INFO] Loading sentence-transformer model (all-MiniLM-L6-v2)...")
-model = SentenceTransformer("all-MiniLM-L6-v2")
-print("[SUCCESS] Embedding model loaded successfully.")
+_model = None
+_model_lock = Lock()
+
+
+def _get_model():
+    """Load the embedding model on first use, not while the API is starting."""
+    global _model
+    if _model is None:
+        with _model_lock:
+            if _model is None:
+                from sentence_transformers import SentenceTransformer
+
+                print("[INFO] Loading sentence-transformer model (all-MiniLM-L6-v2)...")
+                _model = SentenceTransformer("all-MiniLM-L6-v2")
+                print("[SUCCESS] Embedding model loaded successfully.")
+    return _model
 
 
 def generate_embedding(text: str) -> list[float]:
@@ -34,5 +45,5 @@ def generate_embedding(text: str) -> list[float]:
     # model.encode() returns a numpy array; .tolist() converts it to a
     # plain Python list of floats, which is JSON-serializable and compatible
     # with the Supabase client's insert/RPC calls.
-    embedding = model.encode(text)
+    embedding = _get_model().encode(text)
     return embedding.tolist()
