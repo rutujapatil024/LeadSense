@@ -1,4 +1,5 @@
 # LeadSense — GenAI Lead Intelligence Copilot
+https://lead-sense-five.vercel.app/
 
 A full-stack RAG-powered application that lets sales/franchise teams query lead data using natural language, get AI-generated follow-up emails, see explainable lead scores, and receive anomaly alerts.
 
