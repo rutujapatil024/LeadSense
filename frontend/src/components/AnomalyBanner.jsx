@@ -115,7 +115,7 @@ export default function AnomalyBanner({ onLoadingChange }) {
           gap: 'var(--space-md)',
         }}>
           {anomalies.map((anomaly, i) => (
-            <div key={i} style={{
+            <div key={i} className="anomaly-insight-card" style={{
               display: 'flex',
               alignItems: 'flex-start',
               gap: 10,

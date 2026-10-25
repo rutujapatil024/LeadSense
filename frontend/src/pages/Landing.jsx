@@ -57,20 +57,31 @@ export default function Landing({ themeChoice, onThemeChange }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const sections = ['features', 'how-it-works', 'about']
-      .map((id) => document.getElementById(id))
-      .filter(Boolean);
-    if (!('IntersectionObserver' in window) || sections.length === 0) return undefined;
+    const sectionIds = ['how-it-works', 'features', 'about'];
+    const updateActiveSection = () => {
+      const scrollBottom = window.scrollY + window.innerHeight;
+      const pageBottom = document.documentElement.scrollHeight;
+      if (scrollBottom >= pageBottom - 24) {
+        setActiveSection('about');
+        return;
+      }
 
-    const observer = new IntersectionObserver((entries) => {
-      const current = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-      if (current) setActiveSection(current.target.id);
-    }, { rootMargin: '-88px 0px -62% 0px', threshold: 0 });
+      const activationLine = window.scrollY + Math.max(120, window.innerHeight * 0.18);
+      const current = sectionIds
+        .map((id) => document.getElementById(id))
+        .filter(Boolean)
+        .filter((section) => section.getBoundingClientRect().top + window.scrollY <= activationLine)
+        .at(-1);
+      setActiveSection(current?.id ?? '');
+    };
 
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+    updateActiveSection();
+    window.addEventListener('scroll', updateActiveSection, { passive: true });
+    window.addEventListener('resize', updateActiveSection);
+    return () => {
+      window.removeEventListener('scroll', updateActiveSection);
+      window.removeEventListener('resize', updateActiveSection);
+    };
   }, []);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
