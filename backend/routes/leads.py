@@ -11,6 +11,7 @@ from fastapi import APIRouter, HTTPException, UploadFile, File
 from models import LeadCreate, LeadUpdate, LeadResponse, BulkUploadResponse
 from ingestion import ingest_lead, update_lead
 from database import supabase
+from cache import get_cached_leads, set_cached_leads, invalidate_leads_cache
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,7 @@ async def create_lead(lead: LeadCreate):
     """Add a single lead to the system."""
     try:
         result = ingest_lead(lead.model_dump())
+        invalidate_leads_cache()
         return result
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -39,6 +41,7 @@ async def patch_lead(lead_id: str, lead_update: LeadUpdate):
     try:
         update_data = lead_update.model_dump(exclude_unset=True)
         result = update_lead(lead_id, update_data)
+        invalidate_leads_cache()
         return result
     except ValueError as e:
         raise HTTPException(status_code=44, detail=str(e))
@@ -52,6 +55,7 @@ async def delete_lead(lead_id: str):
     """Delete a lead from the database."""
     try:
         res = supabase.table("leads").delete().eq("id", lead_id).execute()
+        invalidate_leads_cache()
         logger.info(f"[DELETE] Lead deleted: {lead_id}")
         return {"status": "success", "deleted_id": lead_id}
     except Exception as e:
@@ -114,6 +118,9 @@ async def bulk_upload_leads(file: UploadFile = File(...)):
             })
             logger.warning(f"[WARNING] Row {index + 2} failed: {e}")
 
+    if success_count > 0:
+        invalidate_leads_cache()
+
     logger.info(
         f"[UPLOAD] Bulk upload complete: {success_count} succeeded, {fail_count} failed"
     )
@@ -127,7 +134,12 @@ async def bulk_upload_leads(file: UploadFile = File(...)):
 
 @router.get("/leads")
 async def list_leads():
-    """List all leads from the database."""
+    """List all leads from the database with in-memory caching."""
+    cached = get_cached_leads()
+    if cached is not None:
+        logger.debug(f"[LEADS] Returning {len(cached)} leads from in-memory cache")
+        return cached
+
     try:
         page_size = 1000
         all_leads = []
@@ -136,7 +148,7 @@ async def list_leads():
         while True:
             result = supabase.table("leads").select(
                 "id, name, contact, location, source, status, priority, "
-                "enquiry_date, last_contacted_date, notes, summary_text, created_at"
+                "enquiry_date, last_contacted_date, notes, created_at"
             ).order("created_at", desc=True).order("id", desc=True).range(
                 start, start + page_size - 1
             ).execute()
@@ -147,7 +159,8 @@ async def list_leads():
                 break
             start += page_size
 
-        logger.info(f"[LEADS] Returned {len(all_leads)} leads")
+        set_cached_leads(all_leads)
+        logger.info(f"[LEADS] Fetched and cached {len(all_leads)} leads")
         return all_leads
     except Exception as e:
         logger.error(f"[ERROR] Failed to list leads: {e}")
