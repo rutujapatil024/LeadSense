@@ -87,9 +87,19 @@ class BulkUploadResponse(BaseModel):
 
 # ── Chat / RAG Schemas ─────────────────────────────────────
 
+class ChatMessage(BaseModel):
+    """A single message in the chat history."""
+    role: str = Field(..., description="'user' or 'assistant'")
+    content: str = Field(..., description="Message text content")
+
+
 class AskRequest(BaseModel):
     """Input for the /ask RAG endpoint."""
     question: str = Field(..., description="Natural language question about lead data")
+    history: list[ChatMessage] = Field(
+        default_factory=list,
+        description="Recent conversation history for multi-turn context"
+    )
 
 
 class AskResponse(BaseModel):

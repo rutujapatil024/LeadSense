@@ -82,11 +82,11 @@ export async function getLeads() {
 
 // ── Chat / RAG Endpoint ──────────────────────────────────
 
-/** Ask a natural language question about lead data */
-export async function askQuestion(question) {
+/** Ask a natural language question about lead data with conversation history */
+export async function askQuestion(question, history = []) {
   return apiFetch('/ask', {
     method: 'POST',
-    body: JSON.stringify({ question }),
+    body: JSON.stringify({ question, history }),
   });
 }
 

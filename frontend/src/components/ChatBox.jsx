@@ -24,13 +24,19 @@ export default function ChatBox({ messages, setMessages }) {
     const question = input.trim();
     if (!question || loading) return;
 
-    // Add user message
+    // Build history from existing conversation messages (last 8-10 turns)
+    const historyPayload = messages
+      .filter((m) => (m.role === 'user' || m.role === 'assistant') && m.content)
+      .slice(-10)
+      .map((m) => ({ role: m.role, content: m.content }));
+
+    // Add user message to UI immediately
     setMessages((prev) => [...prev, { role: 'user', content: question }]);
     setInput('');
     setLoading(true);
 
     try {
-      const response = await askQuestion(question);
+      const response = await askQuestion(question, historyPayload);
       setMessages((prev) => [
         ...prev,
         {

@@ -28,9 +28,7 @@ export default function Chat({ messages, setMessages }) {
     downloadCsvForExcel(filename, headers, rows);
   }
 
-  const MAX_TOKENS = 8192;
   const totalTokensUsed = (messages || []).reduce((acc, m) => acc + (m.tokensUsed || 0), 0);
-  const tokensPercentage = Math.min(((totalTokensUsed / MAX_TOKENS) * 100), 100).toFixed(1);
 
   return (
     <div>
@@ -44,7 +42,7 @@ export default function Chat({ messages, setMessages }) {
         <div className="page-header-actions">
           {totalTokensUsed > 0 && (
             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              {tokensPercentage}% of tokens used
+              {totalTokensUsed.toLocaleString()} tokens used (session)
             </span>
           )}
           <button

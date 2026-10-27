@@ -31,7 +31,8 @@ async def ask(request: AskRequest):
         raise HTTPException(status_code=400, detail="Question cannot be empty.")
 
     try:
-        result = await ask_question(request.question)
+        history_dicts = [{"role": msg.role, "content": msg.content} for msg in request.history]
+        result = await ask_question(request.question, history=history_dicts)
         return AskResponse(
             answer=result["answer"],
             sources=result["sources"],
